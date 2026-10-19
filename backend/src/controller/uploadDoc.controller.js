@@ -111,15 +111,16 @@ async function uploadDocs(req, res) {
             sessionId,
 
             document: {
-                fileName:
-                    req.file.originalname,
+                fileName: req.file.originalname,
 
-                totalPages:
-                    pages.length,
+                totalPages: pages.length,
 
-                totalChunks:
-                    allChunks.length
-            }
+                totalChunks: allChunks.length,
+
+               // totalContent: allChunks,
+
+                
+            } 
 
         });
 

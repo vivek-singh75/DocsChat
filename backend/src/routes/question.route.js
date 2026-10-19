@@ -3,7 +3,7 @@ const express = require("express");
 const questionRouter = express.Router()
 const questionController  = require("../controller/question.controller");
 
-questionRouter.get("/question" , questionController.userQuestion);
+questionRouter.post("/question" , questionController.userQuestion);
 
 
 

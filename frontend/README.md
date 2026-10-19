@@ -1,16 +1,23 @@
-# React + Vite
+# DocsChat frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+## Run locally
 
-Currently, two official plugins are available:
+Start the backend on port `4000`, then run the frontend:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```sh
+npm install
+npm run dev
+```
 
-## React Compiler
+Vite proxies `/api` requests to `http://localhost:4000`.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Frontend layers
 
-## Expanding the Oxlint configuration
+- `src/api/` — upload and question HTTP requests
+- `src/hooks/` — upload, conversation, and inactivity-session state
+- `src/ui/` — reusable icons and the chat workspace interface
+- `src/App.jsx` — page layout and UX orchestration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Backend response contract
+
+The frontend sends a PDF as `docsFile` to `POST /api/docs/upload` and expects `success`, `message`, `sessionId`, and `document` metadata (`fileName`, `totalPages`, and `totalChunks`). It sends questions as JSON `{ sessionId, userQuery }` to `POST /api/user/question` and displays the returned `response` string.

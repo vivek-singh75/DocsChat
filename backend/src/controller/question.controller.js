@@ -106,7 +106,7 @@ async function userQuestion(req, res) {
         return res.status(200).json({
             success: true,
             response
-        });
+        }); 
 
     } catch (error) {
         console.error("Question error:", error);
