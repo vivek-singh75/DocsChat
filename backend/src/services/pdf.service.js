@@ -1,11 +1,12 @@
-const fs = require("fs");
 const pdfjsLib = require("pdfjs-dist/legacy/build/pdf.mjs");
 
-async function extractTextFromPDF(filePath) {
+async function extractTextFromPDF(fileBuffer) {
 
-    const data = new Uint8Array(
-        fs.readFileSync(filePath)
-    );
+    if (!fileBuffer || fileBuffer.length === 0) {
+        throw new Error("PDF buffer is empty");
+    }
+
+    const data = new Uint8Array(fileBuffer);
 
     const pdf = await pdfjsLib.getDocument({
         data

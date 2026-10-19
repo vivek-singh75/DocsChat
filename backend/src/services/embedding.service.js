@@ -1,17 +1,25 @@
-import { GoogleGenAI } from "@google/genai";
+const { GoogleGenAI } =  require("@google/genai");
 
 
+async function createVector() {
 
-async function main() {
-
-    const ai = new GoogleGenAI({});
+    const ai = new GoogleGenAI({
+        apiKey:process.env.GEMINI_EMBEDDING_KEY
+    });
 
     const response = await ai.models.embedContent({
         model: 'gemini-embedding-2',
         contents: 'What is the meaning of life?',
     });
 
-    console.log(response.embeddings);
+    //console.log(response?.embeddings);
+
+    return response?.embeddings
+
+
 }
 
-main();
+
+module.exports  ={
+    createVector
+}

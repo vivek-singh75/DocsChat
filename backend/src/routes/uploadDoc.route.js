@@ -5,8 +5,10 @@ const { uploadDocs } = require("../controller/uploadDoc.controller");
 
 const uploadRouter = express.Router();
 
+const storage = multer.memoryStorage();
+
 const upload = multer({
-    dest: "uploads/"
+    storage
 });
 
 uploadRouter.post(

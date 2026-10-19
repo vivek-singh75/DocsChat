@@ -1,5 +1,6 @@
 const { extractTextFromPDF } = require("../services/pdf.service");
 const { createChunks } = require("../services/chunk.service");
+const { createVector} = require("../services/embedding.service")
 
 async function uploadDocs(req, res) {
 
@@ -14,7 +15,7 @@ async function uploadDocs(req, res) {
 
         console.log("File received:", req.file.originalname);
 
-        const pages = await extractTextFromPDF(req.file.path);
+        const pages = await extractTextFromPDF(req.file.buffer);
 
         const allChunks = [];
 
@@ -22,12 +23,16 @@ async function uploadDocs(req, res) {
 
             const chunks = createChunks(page.text);
 
-            chunks.forEach((chunk, index) => {
+            //console.log(chunks)
+            const vectors = await textToVector(chunks)
 
+            chunks.forEach((chunk, index) => {
+ 
                 allChunks.push({
                     pageNumber: page.pageNumber,
                     chunkIndex: index,
-                    text: chunk
+                    text: chunk,
+                    vector : vectors
                 });
 
             });
@@ -35,7 +40,11 @@ async function uploadDocs(req, res) {
 
         console.log("Total chunks:", allChunks.length);
 
-        console.log(allChunks);
+
+
+        //console.log(allChunks);
+
+
 
         return res.status(200).json({
             success: true,
@@ -59,3 +68,28 @@ async function uploadDocs(req, res) {
 module.exports = {
     uploadDocs
 };
+
+//==============================================
+// used to create vector by using google embedding models
+//================================================
+
+async function textToVector(chunks) {
+
+    try {
+
+        if(!chunks){
+            return console.log(`Chunks was not received`)
+        }
+
+        const response = await createVector(chunks)
+
+        console.log(response)
+
+        return response
+
+    } catch (error) {
+        console.log(`embedding error ${error.message}`)
+    }
+    
+
+}
