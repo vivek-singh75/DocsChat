@@ -1,25 +1,25 @@
-const { GoogleGenAI } =  require("@google/genai");
+const { GoogleGenAI } = require("@google/genai");
 
+const ai = new GoogleGenAI({
+    apiKey: process.env.GEMINI_EMBEDDING_KEY
+});
 
-async function createVector() {
-
-    const ai = new GoogleGenAI({
-        apiKey:process.env.GEMINI_EMBEDDING_KEY
-    });
-
+async function createVector(text) {
     const response = await ai.models.embedContent({
-        model: 'gemini-embedding-2',
-        contents: 'What is the meaning of life?',
+        model: "gemini-embedding-2",
+
+        contents: text,
+
+        config: {
+            outputDimensionality: Number(
+                process.env.VECTOR_DIMENSTION
+            )
+        }
     });
 
-    //console.log(response?.embeddings);
-
-    return response?.embeddings
-
-
+    return response?.embeddings?.[0];
 }
 
-
-module.exports  ={
+module.exports = {
     createVector
-}
+};
