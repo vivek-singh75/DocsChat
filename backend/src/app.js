@@ -1,7 +1,7 @@
 const express = require("express");
+const cors = require("cors");
 
 const app = express();
-const cors =require("cors")
 
 const allowedOrigins = [
     "http://localhost:5173",
@@ -11,8 +11,8 @@ const allowedOrigins = [
 app.use(cors({
     origin: function (origin, callback) {
 
-        // Allow requests without origin
-        // such as Postman
+        console.log("REQUEST ORIGIN:", origin);
+
         if (!origin) {
             return callback(null, true);
         }
@@ -21,23 +21,19 @@ app.use(cors({
             return callback(null, true);
         }
 
-        return callback(new Error("Not allowed by CORS"));
+        console.log("BLOCKED ORIGIN:", origin);
+
+        return callback(new Error(`Not allowed by CORS: ${origin}`));
     }
 }));
-
-const uploadRouter = require("../src/routes/uploadDoc.route");
-
-const questionRouter = require("../src/routes/question.route");
 
 app.use(express.json());
 app.use(express.text());
 
+const uploadRouter = require("../src/routes/uploadDoc.route");
+const questionRouter = require("../src/routes/question.route");
 
-app.use('/api/docs' , uploadRouter);
+app.use("/api/docs", uploadRouter);
+app.use("/api/user", questionRouter);
 
-app.use("/api/user" , questionRouter);
-
-
-
-
-module.exports = app
+module.exports = app;

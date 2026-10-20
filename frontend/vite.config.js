@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:4000',
+        target: 'https://vivek-singh75.github.io/DocsChat/',
         changeOrigin: true,
       },
     },
